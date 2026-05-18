@@ -23,7 +23,7 @@ makedepends="alsa-lib-devel boost-devel-minimal libboost_regex
  qt6-base-private-devel kf6-kcoreaddons-devel ada-devel
  xcb-util-keysyms-devel hunspell-devel protobuf-devel
  glibmm2.68-devel tg_owt rnnoise-devel jemalloc-devel
- qt6-declarative-devel libdispatch-devel"
+ qt6-declarative-devel libdispatch-devel libvpx-devel abseil-cpp-devel"
 depends="qt6-imageformats ttf-opensans libvpx"
 short_desc="AyuGram Desktop - Telegram client with additional features"
 maintainer="Vostok Linux <packaging@vostoklinux.org>"
