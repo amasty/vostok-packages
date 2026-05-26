@@ -7,6 +7,6 @@ depends="steam-bin>=${version}_${revision}
          mesa-dri-32bit mesa-vulkan-radeon-32bit mesa-vulkan-intel-32bit
          mesa-vulkan-radeon mesa-vulkan-intel"
 short_desc="With Mesa GPU support (AMD/Intel)"
-maintainer="Vostok Linux <packaging@vostoklinux.org>"
+maintainer="cybarchitect <cybarchitect@gmail.com>"
 license="custom:Valve-SSA"
 homepage="https://steampowered.com"
