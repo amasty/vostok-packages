@@ -31,7 +31,6 @@ fi
 
 echo "brave: ${CURRENT} → ${LATEST}"
 
-# Get download URL directly from assets — Brave changes filename format between releases
 DOWNLOAD_URL=$(echo "${INFO}" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
