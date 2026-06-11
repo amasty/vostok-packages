@@ -1,11 +1,11 @@
 #!/bin/bash
-# Auto-updater for chatbox
+# Auto-updater for chatbox (AppImage via GitHub releases)
 set -euo pipefail
 
 TEMPLATE="$(dirname "$0")/template"
 CURRENT=$(grep '^version=' "${TEMPLATE}" | cut -d= -f2)
 
-echo "Fetching latest Chatbox version..."
+echo "Fetching latest Chatbox version from GitHub..."
 
 CURL_ARGS=(-fsSL -H "Accept: application/vnd.github+json")
 [ -n "${GITHUB_TOKEN:-}" ] && CURL_ARGS+=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
@@ -31,14 +31,14 @@ fi
 
 echo "chatbox: ${CURRENT} → ${LATEST}"
 
-DOWNLOAD_URL="https://github.com/chatboxai/chatbox/releases/download/v${LATEST}/Chatbox-${LATEST}-amd64.deb"
-echo "URL: ${DOWNLOAD_URL}"
+APPIMAGE_URL="https://download.chatboxai.app/releases/Chatbox-${LATEST}-x86_64.AppImage"
+echo "URL: ${APPIMAGE_URL}"
 echo "Computing checksum..."
-CHECKSUM=$(curl -L -# "${DOWNLOAD_URL}" | sha256sum | cut -d' ' -f1)
+CHECKSUM=$(curl -L -# "${APPIMAGE_URL}" | sha256sum | cut -d' ' -f1)
 
 sed -i "s/^version=.*/version=${LATEST}/" "${TEMPLATE}"
 sed -i "s/^checksum=.*/checksum=${CHECKSUM}/" "${TEMPLATE}"
 sed -i "s/^revision=.*/revision=1/" "${TEMPLATE}"
 
 echo "Done: ${LATEST} (${CHECKSUM:0:16}...)"
-echo "WARNING: Verify that internal file layout (paths like opt/Chatbox, icon location) hasn't changed."
+echo "WARNING: Verify that the AppImage internal structure (binary name, icon paths) hasn't changed."

@@ -4,12 +4,13 @@ version=1.21.0
 revision=1
 archs="x86_64"
 wrksrc="chatbox-${version}"
+hostmakedepends="glib"
 short_desc="Chatbox: Desktop client for AI chat models"
-license="MIT"
 maintainer="cybarchitect <cybarchitect@gmail.com>"
-homepage="https://github.com/chatboxai/chatbox"
-distfiles="https://github.com/chatboxai/chatbox/releases/download/v${version}/Chatbox-${version}-amd64.deb"
-checksum=0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
+license="MIT"
+homepage="https://chatboxai.app/"
+distfiles="https://download.chatboxai.app/releases/Chatbox-${version}-x86_64.AppImage"
+checksum=a7173b8e62debf5a30d12dd4144a9d523f8c5607a4307f362669ebc0b18669e5
 nostrip=yes
 noshlibs=yes
 noverifyrdeps=yes
@@ -17,16 +18,19 @@ noverifyrdeps=yes
 depends="libsecret libgbm eudev-libudev alsa-lib libcups libpulseaudio"
 
 do_extract() {
-    mkdir -p ${wrksrc}
-    bsdtar -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/Chatbox-${version}-amd64.deb \
-        -C ${wrksrc} --include='data.tar*'
-    bsdtar -xf ${wrksrc}/data.tar* -C ${wrksrc}
-    rm ${wrksrc}/data.tar*
+    local appimage="${XBPS_SRCDISTDIR}/${pkgname}-${version}/Chatbox-${version}-x86_64.AppImage"
+    chmod +x "${appimage}"
+    cd "${XBPS_BUILDDIR}"
+    "${appimage}" --appimage-extract
+    rm -rf "${wrksrc}"
+    mv squashfs-root "${wrksrc}"
 }
 
 do_install() {
-    vmkdir opt
-    vcopy opt/Chatbox opt/chatbox
+    vmkdir opt/chatbox
+    vcopy "*" opt/chatbox
+    vcopy ".[!.]*" opt/chatbox 2>/dev/null || true
+
     find ${DESTDIR}/opt/chatbox -xtype l -delete
     find ${DESTDIR}/opt/chatbox -name "* *" -exec rm -rf {} +
     find ${DESTDIR}/opt/chatbox -type f -links +1 | while IFS= read -r f; do
@@ -38,13 +42,23 @@ do_install() {
     ln -sf /opt/chatbox/xyz.chatboxapp.app ${DESTDIR}/usr/bin/chatbox
 
     vmkdir usr/share/icons/hicolor/256x256/apps
-    vinstall opt/Chatbox/resources/assets/icon.png 644 usr/share/icons/hicolor/256x256/apps chatbox.png
-
     vmkdir usr/share/pixmaps
-    vinstall opt/Chatbox/resources/assets/icon.png 644 usr/share/pixmaps chatbox.png
-
+    local icon_found=""
+    for icon in opt/chatbox/xyz.chatboxapp.app.png \
+                opt/chatbox/usr/share/icons/hicolor/0x0/apps/chatbox.png \
+                opt/chatbox/resources/assets/icon.png; do
+        if [ -f "$icon" ]; then
+            vinstall "$icon" 644 usr/share/icons/hicolor/256x256/apps chatbox.png
+            vinstall "$icon" 644 usr/share/pixmaps chatbox.png
+            icon_found=1
+            break
+        fi
+    done
+    if [ -z "$icon_found" ]; then
+        touch ${DESTDIR}/usr/share/icons/hicolor/256x256/apps/chatbox.png
+        touch ${DESTDIR}/usr/share/pixmaps/chatbox.png
+    fi
     vmkdir usr/share/applications
     vinstall ${FILESDIR}/chatbox.desktop 644 usr/share/applications
-
-    vinstall opt/Chatbox/LICENSE.electron.txt 644 usr/share/licenses/${pkgname}
+    vlicense LICENSE.electron.txt
 }
