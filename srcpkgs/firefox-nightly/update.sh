@@ -13,7 +13,6 @@ VERSIONS=$(curl -fsSL "$API_URL") || {
     exit 1
 }
 
-# Извлекаем значение FIREFOX_NIGHTLY
 LATEST=$(echo "$VERSIONS" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
@@ -35,13 +34,11 @@ fi
 
 echo "firefox-nightly: ${CURRENT} → ${LATEST}"
 
-# Скачиваем архив по постоянному URL (редирект на последнюю сборку)
 DOWNLOAD_URL="https://download.mozilla.org/?product=firefox-nightly-latest&os=linux64&lang=en-US"
 echo "Downloading: ${DOWNLOAD_URL}"
 echo "Computing checksum..."
 CHECKSUM=$(curl -L -# "${DOWNLOAD_URL}" | sha256sum | cut -d' ' -f1)
 
-# Обновляем template
 sed -i "s/^version=.*/version=${LATEST}/" "${TEMPLATE}"
 sed -i "s/^checksum=.*/checksum=${CHECKSUM}/" "${TEMPLATE}"
 sed -i "s/^revision=.*/revision=1/" "${TEMPLATE}"
