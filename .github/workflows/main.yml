@@ -32,15 +32,14 @@ jobs:
       - name: Prepare container
         run: |
           mkdir -p /etc/xbps.d
-          cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
-          #sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          echo 'repository=https://repo-de.voidlinux.org/current' > /etc/xbps.d/00-repository-main.conf
+          echo 'repository=https://repo-de.voidlinux.org/current/nonfree' > /etc/xbps.d/10-repository-nonfree.conf
           xbps-install -Syu xbps && xbps-install -yu
           xbps-install -y sudo bash curl git xtools
           useradd -G xbuilder -M builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           echo "builder:100000:65536" >> /etc/subuid
           echo "builder:100000:65536" >> /etc/subgid
-          # Разрешаем git работать в папке Actions
           git config --global --add safe.directory /__w/vostok-packages/vostok-packages
 
       - name: Checkout
