@@ -1,5 +1,4 @@
 #!/bin/bash
-# Auto-updater for google-chrome-dev (RPM metadata, unstable channel)
 set -euo pipefail
 
 TEMPLATE="$(dirname "$0")/template"
@@ -10,7 +9,6 @@ echo "Fetching latest Google Chrome Dev version..."
 REPO_BASE="https://dl.google.com/linux/chrome/rpm/stable/x86_64"
 REPOMD_URL="${REPO_BASE}/repodata/repomd.xml"
 
-echo "Downloading ${REPOMD_URL} ..."
 REPOMD=$(curl -fsSL "$REPOMD_URL") || {
     echo "ERROR: Failed to download repomd.xml" >&2
     exit 1
@@ -26,14 +24,10 @@ for data in root.findall('.//r:data', ns):
         break
 ")
 
-if [ -z "$HREF" ]; then
-    echo "ERROR: Could not find primary XML location" >&2
-    exit 1
-fi
+[ -z "$HREF" ] && { echo "ERROR: Could not find primary XML location" >&2; exit 1; }
 
 HREF="${HREF#./}"
 PRIMARY_XML_URL="${REPO_BASE}/${HREF}"
-echo "Primary XML: ${PRIMARY_XML_URL}"
 
 TMP_GZ=$(mktemp)
 trap 'rm -f "$TMP_GZ"' EXIT
@@ -59,30 +53,31 @@ for pkg in root.findall('.//r:package', ns):
         break
 ")
 
-if [ -z "$LATEST_VER" ]; then
-    echo "ERROR: Could not find google-chrome-unstable" >&2
-    exit 1
-fi
+[ -z "$LATEST_VER" ] && { echo "ERROR: Could not find google-chrome-unstable" >&2; exit 1; }
 
 VERSION="${LATEST_VER%-*}"
-RELEASE="${LATEST_VER##*-}"
 
 if [ "${CURRENT}" = "${VERSION}" ]; then
     echo "google-chrome-dev: ${CURRENT} — already up to date"
     exit 0
 fi
 
-echo "google-chrome-dev: ${CURRENT} → ${VERSION} (release ${RELEASE})"
+echo "google-chrome-dev: ${CURRENT} → ${VERSION}"
 
-DEB_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_${VERSION}-${RELEASE}_amd64.deb"
+DEB_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_${VERSION}-1_amd64.deb"
 echo "URL: ${DEB_URL}"
+
+if ! curl --head --silent --fail "${DEB_URL}" > /dev/null; then
+    echo "ERROR: Deb package not found at ${DEB_URL}" >&2
+    exit 1
+fi
+
 echo "Computing checksum..."
 CHECKSUM=$(curl -L -# "${DEB_URL}" | sha256sum | cut -d' ' -f1)
 
 sed -i "s/^version=.*/version=${VERSION}/" "${TEMPLATE}"
-sed -i "s|^distfiles=.*|distfiles=\"https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_\${version}-${RELEASE}_amd64.deb\"|" "${TEMPLATE}"
+sed -i "s|^distfiles=.*|distfiles=\"https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_\${version}-1_amd64.deb\"|" "${TEMPLATE}"
 sed -i "s/^checksum=.*/checksum=${CHECKSUM}/" "${TEMPLATE}"
 sed -i "s/^revision=.*/revision=1/" "${TEMPLATE}"
 
 echo "Done: ${VERSION} (${CHECKSUM:0:16}...)"
-echo "WARNING: Release number (${RELEASE}) is now written into the template."
