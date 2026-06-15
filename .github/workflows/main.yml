@@ -19,6 +19,9 @@ jobs:
     name: Build packages
     runs-on: ubuntu-latest
 
+    env:
+      XBPS_REPOSITORY: https://repo-de.voidlinux.org/current
+
     container:
       image: ghcr.io/void-linux/void-glibc-full
       options: --privileged
@@ -162,8 +165,7 @@ jobs:
       - name: Prepare container
         run: |
           mkdir -p /etc/xbps.d
-          cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
-          #sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+          echo 'repository=https://repo-de.voidlinux.org/current' > /etc/xbps.d/00-repository-main.conf
           xbps-install -Syu xbps && xbps-install -yu
           xbps-install -y openssh rsync
 
