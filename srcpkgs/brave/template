@@ -18,7 +18,6 @@ do_install() {
 	vcopy "*" opt/brave
 	vmkdir usr/bin
 	ln -sf /opt/brave/brave ${DESTDIR}/usr/bin/brave
-
 	vinstall ${FILESDIR}/brave.desktop 644 usr/share/applications
 
 	for size in 16 24 32 48 64 128 256; do
