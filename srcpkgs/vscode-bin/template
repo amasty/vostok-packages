@@ -28,7 +28,6 @@ do_install() {
 	chmod -R o-w ${DESTDIR}/usr/lib/vscode/resources/app
 	vlicense LICENSES.chromium.html
 
-	# Remove binaries for unsupported architectures/libc
 	rm -f "${DESTDIR}/usr/lib/vscode/resources/app/node_modules/@microsoft/mxc-sdk/bin/arm64/lxc-exec"
 	rm -rf "${DESTDIR}/usr/lib/vscode/resources/app/node_modules/@github/copilot-linuxmusl-x64"
 }
