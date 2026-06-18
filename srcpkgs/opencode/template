@@ -32,7 +32,6 @@ do_install() {
 	fi
 
 	vinstall ${FILESDIR}/opencode.desktop 644 usr/share/applications
-
 	vmkdir usr/share/licenses/${pkgname}
 	echo "OpenCode is licensed under MIT. See https://github.com/anomalyco/opencode" > ${DESTDIR}/usr/share/licenses/${pkgname}/LICENSE
 }
