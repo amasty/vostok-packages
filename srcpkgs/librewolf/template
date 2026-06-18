@@ -1,3 +1,11 @@
+# Template file for 'librewolf'
+pkgname=librewolf
+version=152.0.1
+revision=1
+archs="x86_64"
+wrksrc="librewolf-${version}"
+hostmakedepends="libarchive"
+short_desc="Community-maintained fork of Firefox, focused on privacy, security and freedom"
 maintainer="cybarchitect <cybarchitect@gmail.com>"
 license="MPL-2.0"
 homepage="https://librewolf.net/"
@@ -15,7 +23,6 @@ depends="libsecret libgbm eudev-libudev alsa-lib libcups libpulseaudio
 
 do_extract() {
     mkdir -p "${wrksrc}"
-    # Используем ту же переменную _upver
     bsdtar -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/librewolf-${_upver}-linux-x86_64-package.tar.xz \
         --strip-components 1 -C "${wrksrc}"
 }
