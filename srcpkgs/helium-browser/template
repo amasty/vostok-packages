@@ -35,7 +35,6 @@ do_install() {
 
 	vinstall helium.png 644 usr/share/icons/hicolor/512x512/apps
 	vinstall helium.png 644 usr/share/pixmaps
-
 	chmod -R o-w ${DESTDIR}/opt/helium
 	chmod 755 ${DESTDIR}/opt/helium/AppRun
 

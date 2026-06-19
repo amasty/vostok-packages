@@ -18,6 +18,7 @@ noverifyrdeps=yes
 do_install() {
 	vmkdir usr/lib/vscode
 	vcopy "*" usr/lib/vscode
+	
 	vmkdir usr/bin
 	ln -sf /usr/lib/vscode/bin/code ${DESTDIR}/usr/bin/code
 	vinstall ${FILESDIR}/code.desktop 644 usr/share/applications

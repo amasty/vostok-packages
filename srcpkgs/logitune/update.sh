@@ -41,5 +41,4 @@ CHECKSUM=$(curl -L -# "${DOWNLOAD_URL}" | sha256sum | cut -d' ' -f1)
 sed -i "s/^version=.*/version=${LATEST}/" "${TEMPLATE}"
 sed -i "s/^checksum=.*/checksum=${CHECKSUM}/" "${TEMPLATE}"
 sed -i "s/^revision=.*/revision=1/" "${TEMPLATE}"
-
 echo "Done: ${LATEST} (${CHECKSUM:0:16}...)"

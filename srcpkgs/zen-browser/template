@@ -33,6 +33,7 @@ do_install() {
         cp --remove-destination "${f}" "${f}.tmp"
         mv "${f}.tmp" "${f}"
     done
+    
     vmkdir usr/bin
     ln -sf /opt/zen-browser/zen-bin ${DESTDIR}/usr/bin/zen-browser
 
