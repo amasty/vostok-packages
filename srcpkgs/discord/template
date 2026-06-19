@@ -1,0 +1,54 @@
+# Template file for 'discord'
+pkgname=discord
+version=1.0.143
+revision=1
+archs="x86_64"
+wrksrc="discord-${version}"
+hostmakedepends="libarchive"
+short_desc="All-in-one voice and text chat for gamers"
+maintainer="cybarchitect <cybarchitect@gmail.com>"
+license="custom:Discord"
+homepage="https://discord.com/"
+distfiles="https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.deb"
+checksum=466443bbda724766c6dee376041a607fc5cbdda40efd9019c108a06b0b15f5ba
+nostrip=yes
+noshlibs=yes
+noverifyrdeps=yes
+
+depends="libsecret libgbm eudev-libudev alsa-lib libcups libpulseaudio
+         gtk+3 libX11 libXcomposite libXdamage libXext libXfixes
+         libXrandr libXrender libXtst nss nspr"
+
+do_extract() {
+    mkdir -p "${wrksrc}"
+    bsdtar -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/discord-${version}.deb \
+        -C "${wrksrc}" --include='data.tar*'
+    bsdtar -xf "${wrksrc}"/data.tar.* -C "${wrksrc}"
+    rm "${wrksrc}"/data.tar.*
+}
+
+do_install() {
+    vcopy "usr/*" usr
+
+    vmkdir opt/discord
+    vcopy "usr/share/discord/*" opt/discord
+
+    vmkdir usr/share/icons/hicolor/256x256/apps
+    vinstall "usr/share/discord/discord.png" 644 \
+        usr/share/icons/hicolor/256x256/apps discord.png
+    vmkdir usr/share/pixmaps
+    vinstall "usr/share/discord/discord.png" 644 \
+        usr/share/pixmaps discord.png
+
+    rm -rf ${DESTDIR}/usr/share/discord
+
+    mv ${DESTDIR}/usr/bin/discord ${DESTDIR}/opt/discord/discord
+    vmkdir usr/bin
+    ln -sf /opt/discord/discord ${DESTDIR}/usr/bin/discord
+
+    rm -f ${DESTDIR}/usr/share/applications/discord.desktop
+    vmkdir usr/share/applications
+    vinstall ${FILESDIR}/discord.desktop 644 usr/share/applications
+
+    vlicense usr/share/doc/discord/copyright
+}
