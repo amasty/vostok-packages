@@ -26,6 +26,7 @@ do_extract() {
 
 do_install() {
     vmkdir opt/portainer
+    
     vcopy "*" opt/portainer
 
     vmkdir usr/bin
