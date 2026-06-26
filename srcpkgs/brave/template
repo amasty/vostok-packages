@@ -26,7 +26,6 @@ do_install() {
 			usr/share/icons/hicolor/${size}x${size}/apps brave.png
 	done
 	vinstall product_logo_128.png 644 usr/share/pixmaps brave.png
-
 	vlicense LICENSE
 }
 
