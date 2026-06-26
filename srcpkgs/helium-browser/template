@@ -32,7 +32,6 @@ do_install() {
 	ln -sf /opt/helium/AppRun ${DESTDIR}/usr/bin/helium
 
 	vinstall ${FILESDIR}/helium.desktop 644 usr/share/applications
-
 	vinstall helium.png 644 usr/share/icons/hicolor/512x512/apps
 	vinstall helium.png 644 usr/share/pixmaps
 	chmod -R o-w ${DESTDIR}/opt/helium
