@@ -44,6 +44,7 @@ do_install() {
                 usr/share/icons/hicolor/${size}x${size}/apps google-chrome.png
         fi
     done
+    
     vmkdir usr/share/pixmaps
     vinstall opt/google/chrome/product_logo_256.png 644 usr/share/pixmaps google-chrome.png
     vinstall ${FILESDIR}/LICENSE 644 usr/share/licenses/${pkgname}
