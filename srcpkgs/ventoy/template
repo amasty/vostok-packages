@@ -43,6 +43,5 @@ do_install() {
 
     vmkdir usr/share/applications
     vinstall ${FILESDIR}/ventoy.desktop 644 usr/share/applications
-
     vinstall ${FILESDIR}/LICENSE 644 usr/share/licenses/${pkgname}
 }
