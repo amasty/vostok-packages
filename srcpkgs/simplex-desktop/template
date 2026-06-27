@@ -15,7 +15,7 @@ nostrip=yes
 noshlibs=yes
 noverifyrdeps=yes
 
-depends="java-environment"
+depends="libsecret libgbm eudev-libudev alsa-lib libcups libpulseaudio gtk+3"
 
 do_extract() {
     mkdir -p "${wrksrc}"
