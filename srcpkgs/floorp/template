@@ -15,7 +15,7 @@ nostrip=yes
 noshlibs=yes
 noverifyrdeps=yes
 
-depends="gtk+3 libXt dbus-glib nss nspr alsa-lib libpulseaudio libcups hicolor-icon-theme"
+depends="gtk+3 libXt nss nspr alsa-lib libpulseaudio libcups hicolor-icon-theme"
 
 do_extract() {
     mkdir -p "${wrksrc}"
