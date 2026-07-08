@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Postman
+Comment=API development environment
+Exec=postman %U
+Icon=postman
+Terminal=false
+Type=Application
+Categories=Development;
+StartupNotify=true
