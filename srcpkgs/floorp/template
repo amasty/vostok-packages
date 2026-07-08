@@ -1,0 +1,42 @@
+# Template file for 'floorp'
+pkgname=floorp
+version=12.15.3
+revision=1
+archs="x86_64"
+wrksrc="floorp-${version}"
+hostmakedepends="libarchive"
+short_desc="Floorp Browser - a Firefox-based browser with excellent privacy"
+maintainer="cybarchitect <cybarchitect@gmail.com>"
+license="MPL-2.0"
+homepage="https://floorp.app/"
+distfiles="https://github.com/Floorp-Projects/Floorp/releases/download/v${version}/floorp-${version}.deb"
+checksum=880aef9c32a237520bfb8fba914018118243b9959901f7af20c1495917e5876f
+nostrip=yes
+noshlibs=yes
+noverifyrdeps=yes
+
+depends="libsecret libgbm eudev-libudev alsa-lib libcups libpulseaudio gtk+3 ffmpeg dbus-glib nss sqlite hicolor-icon-theme"
+
+do_extract() {
+    mkdir -p "${wrksrc}"
+    bsdtar -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/floorp-${version}.deb \
+        -C "${wrksrc}" --include='data.tar*'
+    bsdtar -xf "${wrksrc}"/data.tar.* -C "${wrksrc}"
+    rm "${wrksrc}"/data.tar.*
+}
+
+do_install() {
+    vcopy "usr/*" usr
+
+    vmkdir usr/share/icons/hicolor/128x128/apps
+    vinstall "usr/lib/floorp/browser/chrome/icons/default/default128.png" 644 \
+        usr/share/icons/hicolor/128x128/apps floorp.png
+    vmkdir usr/share/pixmaps
+    vinstall "usr/lib/floorp/browser/chrome/icons/default/default128.png" 644 \
+        usr/share/pixmaps floorp.png
+
+    rm -f ${DESTDIR}/usr/share/applications/floorp.desktop
+    vmkdir usr/share/applications
+    vinstall ${FILESDIR}/floorp.desktop 644 usr/share/applications
+    vinstall ${FILESDIR}/LICENSE 644 usr/share/licenses/${pkgname}
+}
