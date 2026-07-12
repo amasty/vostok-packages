@@ -1,1 +1,1 @@
-../setup/misc.sh
+. ../setup/misc.sh
