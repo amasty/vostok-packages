@@ -1,1 +1,1 @@
-../configure/cross.sh
+. "${XBPS_COMMONDIR}/environment/configure/cross.sh

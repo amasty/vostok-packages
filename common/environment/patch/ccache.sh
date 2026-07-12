@@ -1,1 +1,1 @@
-../configure/ccache.sh
+. "${XBPS_COMMONDIR}/environment/configure/ccache.sh

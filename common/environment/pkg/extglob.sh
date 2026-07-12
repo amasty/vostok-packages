@@ -1,1 +1,1 @@
-../install/extglob.sh
+. "${XBPS_COMMONDIR}/environment/install/extglob.sh

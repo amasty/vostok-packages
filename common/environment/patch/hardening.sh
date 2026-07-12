@@ -1,1 +1,1 @@
-../configure/hardening.sh
+. "${XBPS_COMMONDIR}/environment/configure/hardening.sh
