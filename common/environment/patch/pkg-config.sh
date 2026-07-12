@@ -1,1 +1,1 @@
-. "${XBPS_COMMONDIR}/environment/configure/pkg-config.sh
+../configure/pkg-config.sh

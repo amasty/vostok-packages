@@ -1,1 +1,1 @@
-. "${XBPS_COMMONDIR}/environment/configure/bootstrap.sh
+../configure/bootstrap.sh

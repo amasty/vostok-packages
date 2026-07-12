@@ -1,1 +1,1 @@
-. "${XBPS_COMMONDIR}/environment/setup/misc.sh"
+../setup/misc.sh

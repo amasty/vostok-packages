@@ -1,1 +1,1 @@
-. "${XBPS_COMMONDIR}/environment/configure/gnu-configure-args.sh
+../configure/gnu-configure-args.sh

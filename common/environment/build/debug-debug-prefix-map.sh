@@ -1,1 +1,1 @@
-. "${XBPS_COMMONDIR}/environment/configure/debug-debug-prefix-map.sh
+../configure/debug-debug-prefix-map.sh
