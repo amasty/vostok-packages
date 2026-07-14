@@ -1,21 +1,19 @@
 #!/bin/bash
 # Auto-updater for vscode-bin
-# Uses official Microsoft update API — no GitHub needed
+# Uses GitHub releases – always the latest stable tag
 set -euo pipefail
 
 TEMPLATE="$(dirname "$0")/template"
-API_URL="https://update.code.visualstudio.com/api/update/linux-x64/stable/latest"
 
 CURRENT=$(grep '^version=' "${TEMPLATE}" | cut -d= -f2)
 
-echo "Fetching latest VSCode version..."
-INFO=$(curl -fsSL "${API_URL}")
+echo "Fetching latest VSCode version from GitHub..."
 
-
-LATEST=$(echo "${INFO}" | python3 -c "
+API_URL="https://api.github.com/repos/microsoft/vscode/releases/latest"
+LATEST=$(curl -fsSL "$API_URL" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
-print(d['productVersion'])
+print(d['tag_name'])   # тег всегда имеет вид '1.128.0'
 ")
 
 if [ "${CURRENT}" = "${LATEST}" ]; then
@@ -25,12 +23,7 @@ fi
 
 echo "vscode-bin: ${CURRENT} → ${LATEST}"
 
-DOWNLOAD_URL=$(echo "${INFO}" | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-print(d['url'])
-")
-
+DOWNLOAD_URL="https://update.code.visualstudio.com/${LATEST}/linux-x64/stable"
 echo "Computing checksum (downloading ~100MB)..."
 CHECKSUM=$(curl -fsSL "${DOWNLOAD_URL}" | sha256sum | cut -d' ' -f1)
 
